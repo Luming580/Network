@@ -11,10 +11,10 @@ import piq
 import os
 from torchvision.utils import save_image
 from tqdm import tqdm
-from nets.frcnn import FasterRCNN
+from nets.Net import classifiernet
 from torch.cuda.amp import GradScaler as GradScaler
-from nets.frcnn_training import (FasterRCNNTrainer, get_lr_scheduler,
-                                 set_optimizer_lr)
+from nets.net_training import (NetTrainer, get_lr_scheduler,
+                               set_optimizer_lr)
 from utils.utils import (get_classes, show_config)
 from Run.autotest import calculate_average_ssim
 
@@ -94,7 +94,7 @@ train_gpu = [0, ]
 os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(str(x) for x in train_gpu)
 ngpus_per_node = len(train_gpu)
 print('Number of devices: {}'.format(ngpus_per_node))
-Detect = FasterRCNN(num_classes, anchor_scales=anchors_size, backbone=backbone, pretrained=pretrained)
+Detect = classifiernet(num_classes, anchor_scales=anchors_size, backbone=backbone, pretrained=pretrained)
 
 scaler = GradScaler()
 Detect_train = Detect.train()
@@ -129,7 +129,7 @@ lr_scheduler_func = get_lr_scheduler(lr_decay_type, Init_lr_fit, Min_lr_fit, opt
 dataloader = get_loader(image_root, target_image_root, train_lines, batchsize=opt.batchsize, trainsize=opt.trainsize)
 total_step = len(dataloader)
 logger = Logger(opt.n_epochs, len(dataloader))
-train_util = FasterRCNNTrainer(Detect_train, optimizer)
+train_util = NetTrainer(Detect_train, optimizer)
 
 
 def train(dataloader, Generator, Discriminator, epoch, save_model_path, optimizer_G, optimizer_D):
@@ -233,7 +233,11 @@ def train(dataloader, Generator, Discriminator, epoch, save_model_path, optimize
     if epoch > 90 or (epoch > 50 and epoch % 5 == 0):
         torch.save(Generator.state_dict(),
                    f"{save_model_path}/Generator_%d.pth" % (epoch))
+
+best_ssim = 0
+
 def valiable(val_loader, Generator, epoch, save_model_path):
+    global best_ssim, best_ssim_epoch
     save_img_pth = r"~/"
     Generator = Generator()
 
@@ -241,9 +245,6 @@ def valiable(val_loader, Generator, epoch, save_model_path):
 
     if not os.path.exists(save_path_generator):
         os.makedirs(save_path_generator)
-
-    sample_image()
-    print('done!')
 
     with torch.no_grad():
         for i in tqdm(range(val_loader.size), desc="processing image...", unit="file"):
@@ -257,7 +258,7 @@ def valiable(val_loader, Generator, epoch, save_model_path):
     aver_ssims, std_ssim = calculate_average_ssim(save_path_generator, val_target_image_root)
     if aver_ssims > best_ssim:
         best_ssim = aver_ssims
-
+        best_ssim_epoch = epoch
         torch.save(Generator.state_dict(), f"{save_model_path}/Generator_%d.pth" % (epoch))
 
 
