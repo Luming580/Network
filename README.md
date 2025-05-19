@@ -35,8 +35,8 @@
     ---JPEGImages
     ------the image files
   # 1.After completing the placement of the dataset, we need to use process.py to obtain 2025_train.txt and 2025_val.txt for training.
-  # 2.Modify the parameters in process.py. During the first training, only the classes_path can be modified. The classes_path is used to 			point to the txt corresponding to the classifier category.
-  # 3.When training all dataset, you can create a cls_classes.txt by yourself, and write the categories you need to distinguish in it. 			The content of the model_data/cls_classes.txt file is:
+  # 2.Modify the parameters in process.py. During the first training, only the classes_path can be modified. The classes_path is used to point to the txt corresponding to the classifier category.
+  # 3.When training all dataset, you can create a cls_classes.txt by yourself, and write the categories you need to distinguish in it. The content of the model_data/cls_classes.txt file is:
   DT_GAP
   DT_LACUNAS
   DT_CRACK
