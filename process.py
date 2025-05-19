@@ -14,8 +14,8 @@ trainval_percent    = 0.9
 train_percent       = 0.9
 VOCdevkit_path  = 'VOCdevkit'
 
-VOCdevkit_sets  = [('2007', 'train')]
-# VOCdevkit_sets  = [('2007', 'train'), ('2007', 'val')]
+VOCdevkit_sets  = [('2025', 'train')]
+# VOCdevkit_sets  = [('2025', 'train'), ('2025', 'val')]
 classes, _      = get_classes(classes_path)
 
 photo_nums  = np.zeros(len(VOCdevkit_sets))
@@ -46,8 +46,8 @@ if __name__ == "__main__":
 
     if annotation_mode == 0 or annotation_mode == 1:
         print("Generate txt in ImageSets.")
-        xmlfilepath     = os.path.join(VOCdevkit_path, 'VOC2007/Annotations')
-        saveBasePath    = os.path.join(VOCdevkit_path, 'VOC2007/ImageSets/Main')
+        xmlfilepath     = os.path.join(VOCdevkit_path, 'VOC2025/Annotations')
+        saveBasePath    = os.path.join(VOCdevkit_path, 'VOC2025/ImageSets/Main')
         temp_xml        = os.listdir(xmlfilepath)
         total_xml       = []
         for xml in temp_xml:
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         print("Generate txt in ImageSets done.")
 
     if annotation_mode == 0 or annotation_mode == 2:
-        print("Generate 2007_train.txt and 2007_val.txt for train.")
+        print("Generate 2025_train.txt and 2025_val.txt for train.")
         type_index = 0
         for year, image_set in VOCdevkit_sets:
             image_ids = open(os.path.join(VOCdevkit_path, 'VOC%s/ImageSets/Main/%s.txt'%(year, image_set)), encoding='utf-8').read().strip().split()
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             photo_nums[type_index] = len(image_ids)
             type_index += 1
             list_file.close()
-        print("Generate 2007_train.txt and 2007_val.txt for train done.")
+        print("Generate 2025_train.txt and 2025_val.txt for train done.")
         
         def printTable(List1, List2):
             for i in range(len(List1[0])):
