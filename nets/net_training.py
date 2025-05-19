@@ -143,9 +143,9 @@ class ProposalTargetCreator(object):
 
 
 
-class FasterRCNNTrainer(nn.Module):
+class NetTrainer(nn.Module):
     def __init__(self, model_train, optimizer):
-        super(FasterRCNNTrainer, self).__init__()
+        super(NetTrainer, self).__init__()
         self.model_train = model_train
         self.optimizer = optimizer
 
