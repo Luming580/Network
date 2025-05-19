@@ -7,15 +7,15 @@ import torch
 import torch.nn as nn
 from PIL import Image, ImageDraw, ImageFont
 
-from nets.frcnn import FasterRCNN
+from nets.Net import classifiernet
 from utils.utils import (cvtColor, get_classes, get_new_img_size, resize_image,
                          preprocess_input, show_config)
 from utils.utils_bbox import DecodeBox
 
 
-class FRCNN(object):
+class NetTest(object):
     _defaults = {
-        "model_path": 'D:/code/faster-rcnn-pytorch-master/lamba/randomnewdatweight_att58_inch1_loss10_100_10_2_frezz20/detect_20.pth',
+        "model_path": '~/detect.pth',
         "classes_path": 'model_data/voc_classes.txt',
         "backbone": "resnet50",
         "confidence": 0.5,
@@ -48,7 +48,7 @@ class FRCNN(object):
         show_config(**self._defaults)
 
     def generate(self):
-        self.net = FasterRCNN(self.num_classes, "predict", anchor_scales=self.anchors_size, backbone=self.backbone)
+        self.net = classifiernet(self.num_classes, "predict", anchor_scales=self.anchors_size, backbone=self.backbone)
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.net.load_state_dict(torch.load(self.model_path, map_location=device))
         self.net = self.net.eval()
