@@ -60,7 +60,7 @@
 ## Predict
 
 ```python
-	cd Run
+  cd Run
   python autotest.py # Modify the weight file
 ```
 
