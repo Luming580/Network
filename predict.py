@@ -5,10 +5,10 @@ import cv2
 import numpy as np
 from PIL import Image
 
-from frcnn import FRCNN
+from testchange import NetTest
 
 if __name__ == "__main__":
-    frcnn = FRCNN()
+    nettest = NetTest()
 
     mode = "predict"
     crop = False
@@ -31,7 +31,7 @@ if __name__ == "__main__":
                 print('Open Error! Try again!')
                 continue
             else:
-                r_image = frcnn.detect_image(image, crop=crop, count=count)
+                r_image = nettest.detect_image(image, crop=crop, count=count)
                 r_image.show()
 
     elif mode == "video":
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
             frame = Image.fromarray(np.uint8(frame))
 
-            frame = np.array(frcnn.detect_image(frame))
+            frame = np.array(nettest.detect_image(frame))
 
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     elif mode == "fps":
         img = Image.open(fps_image_path)
-        tact_time = frcnn.get_FPS(img, test_interval)
+        tact_time = nettest.get_FPS(img, test_interval)
         print(str(tact_time) + ' seconds, ' + str(1 / tact_time) + 'FPS, @batch_size 1')
 
     elif mode == "dir_predict":
@@ -86,7 +86,7 @@ if __name__ == "__main__":
                     ('.bmp', '.dib', '.png', '.jpg', '.jpeg', '.pbm', '.pgm', '.ppm', '.tif', '.tiff')):
                 image_path = os.path.join(dir_origin_path, img_name)
                 image = Image.open(image_path)
-                r_image = frcnn.detect_image(image)
+                r_image = nettest.detect_image(image)
                 if not os.path.exists(dir_save_path):
                     os.makedirs(dir_save_path)
                 r_image.save(os.path.join(dir_save_path, img_name.replace(".jpg", ".png")), quality=95, subsampling=0)
