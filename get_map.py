@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 from utils.utils import get_classes
 from utils.utils_map import get_coco_map, get_map
-from frcnn import FRCNN
+from testchange import NetTest
 
 if __name__ == "__main__":
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     if map_mode == 0 or map_mode == 1:
         print("Load model.")
-        frcnn = FRCNN(confidence = confidence, nms_iou = nms_iou)
+        nettest = NetTest(confidence = confidence, nms_iou = nms_iou)
         print("Load model done.")
 
         print("Get predict result.")
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             image       = Image.open(image_path)
             if map_vis:
                 image.save(os.path.join(map_out_path, "images-optional/" + image_id + ".jpg"))
-            frcnn.get_map_txt(image_id, image, class_names, map_out_path)
+            nettest.get_map_txt(image_id, image, class_names, map_out_path)
         print("Get predict result done.")
         
     if map_mode == 0 or map_mode == 2:
