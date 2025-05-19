@@ -7,7 +7,7 @@ from nets.rpn import RegionProposalNetwork
 from nets.vgg16 import decom_vgg16
 
 
-class FasterRCNN(nn.Module):
+class classifiernet(nn.Module):
     def __init__(self, num_classes,
                  mode="training",
                  feat_stride=16,
@@ -15,7 +15,7 @@ class FasterRCNN(nn.Module):
                  ratios=[0.5, 1, 2],
                  backbone='vgg',
                  pretrained=False):
-        super(FasterRCNN, self).__init__()
+        super(classifiernet, self).__init__()
         self.feat_stride = feat_stride
         if backbone == 'vgg':
             self.extractor, classifier = decom_vgg16(pretrained)
