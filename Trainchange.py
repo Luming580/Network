@@ -164,7 +164,6 @@ def train(dataloader, Generator, Discriminator, epoch, save_model_path, optimize
 
         # L1损失
         loss_mae = criterion_L1(mid_fake_target, target_images)
-        loss_mse = criterion_L2(mid_fake_target, target_images)
 
         # vgg loss
         vgg_loss = perceptual_loss(mid_fake_target, target_images)
@@ -176,9 +175,7 @@ def train(dataloader, Generator, Discriminator, epoch, save_model_path, optimize
         rpn_loc, rpn_cls, roi_loc, roi_cls, total = train_util.train_step(mid_fake_target, boxes, labels, 1, fp16=False,
                                                                           scaler=scaler)
 
-        g_loss = 2 * loss_GAN + (loss_mse + loss_mae) * 150 \
-                 + vgg_loss * 100 \
-                 + 0.02 * roi_loc + 0.02 * roi_cls
+        g_loss = loss_GAN + loss_mae * 10 + total
         g_loss.backward()
 
         # clip_gradient(optimizer_G, opt.clip)
