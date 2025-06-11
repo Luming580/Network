@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from Gabor.GaboeLayer import GaborConv2d
+
 
 class BasicConv(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0, dilation=1, groups=1, relu=True,
@@ -187,19 +187,7 @@ class Recurrent_block(nn.Module):
         return x1
 
 
-class Gabor_block(nn.Module):
-    def __init__(self, ch_in, ch_out, t=2):
-        super(Gabor_block, self).__init__()
-        self.RCNN = nn.Sequential(
-            Recurrent_block(ch_out, t=t),
-            Recurrent_block(ch_out, t=t)
-        )
-        self.Conv_1x1 = GaborConv2d(ch_in, ch_out, kernel_size=(1,1), stride=1, padding=0)
 
-    def forward(self, x):
-        x = self.Conv_1x1(x)
-        x1 = self.RCNN(x)
-        return x + x1
 
 class RRCNN_block(nn.Module):
     def __init__(self, ch_in, ch_out, t=2):
