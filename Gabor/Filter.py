@@ -61,7 +61,7 @@ def adaptive_window_width(feature_block):
     return hnw, lww
 
 
-class GlobalFilter(nn.Module):
+class GaborFilter(nn.Module):
     def __init__(self, dim, size=32, num=4, len=128, number=16, num_blocks=8, sparsity_threshold=0.01,
                  hard_thresholding_fraction=1,
                  hidden_size_factor=1):
@@ -277,6 +277,6 @@ class DynamicRangeModule2(nn.Module):
 
 if __name__ == '__main__':
     x = torch.randn(1, 1024, 32, 32).cuda()
-    model = GlobalFilter(1024, 16, 2, 32, 4).cuda()
+    model = GaborFilter(1024, 16, 2, 32, 4).cuda()
     y = model(x)
     print(y.shape)
