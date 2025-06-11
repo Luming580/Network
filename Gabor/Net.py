@@ -1,4 +1,4 @@
-from Gabor.Filter import GlobalFilter
+from Gabor.Filter import GaborFilter
 from Gabor.GDNet import GDNet
 import torch.nn as nn
 import torch
@@ -15,10 +15,10 @@ class Generator(nn.Module):
         self.down41 = RRCNN_block(ch_in=256, ch_out=512, t=t)
         self.down51 = RRCNN_block(ch_in=512, ch_out=1024, t=t)
 
-        self.gf1 = GlobalFilter(dim=1024, size=16, num=2, len=32, number=4)
-        self.gf2 = GlobalFilter(dim=512, size=32, num=2, len=64, number=8)
-        self.gf3 = GlobalFilter(dim=256, size=64, num=2, len=128, number=16)
-        self.gf4 = GlobalFilter(dim=128, size=128, num=2, len=256, number=32)
+        self.gf1 = GaborFilter(dim=1024, size=16, num=2, len=32, number=4)
+        self.gf2 = GaborFilter(dim=512, size=32, num=2, len=64, number=8)
+        self.gf3 = GaborFilter(dim=256, size=64, num=2, len=128, number=16)
+        self.gf4 = GaborFilter(dim=128, size=128, num=2, len=256, number=32)
 
         self.Up51 = up_conv(ch_in=1024, ch_out=512)
         self.updown51 = RRCNN_block(ch_in=1024, ch_out=512, t=t)
@@ -103,14 +103,3 @@ def print_network(model, name):
     print("The number of parameters: {}".format(num_params))
     return num_params
 
-# if __name__ == '__main__':
-#     model = Generator()
-#     model.cuda()
-#     params = model.parameters()
-#     model_params = print_network(model, 'newnet')
-#
-# if __name__ == '__main__':
-#     net = Generator().cuda()
-#     x = torch.randn(1, 1, 224, 224)
-#     a, b = net(x.cuda())
-#     print(a.shape, b.shape)
