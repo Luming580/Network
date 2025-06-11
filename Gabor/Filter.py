@@ -89,15 +89,6 @@ class GaborFilter(nn.Module):
         self.b2 = nn.Parameter(self.scale * torch.randn(self.num_blocks, self.block_size))
         self.relu = nn.ReLU(inplace=True)
 
-        self.raw_val1 = DynamicRangeModule(1024, min_value=4.6, max_value=5.6)
-        self.raw_val2 = DynamicRangeModule(512, min_value=7.0, max_value=8.0)
-        self.raw_val3 = DynamicRangeModule(256, min_value=10.3, max_value=11.3)
-        self.raw_val4 = DynamicRangeModule(128, min_value=15.0, max_value=16.0)
-
-        self.raw_val21 = DynamicRangeModule2(1024, min_value=5.6, max_value=7)
-        self.raw_val22 = DynamicRangeModule2(512, min_value=8.0, max_value=10.0)
-        self.raw_val23 = DynamicRangeModule2(256, min_value=11.3, max_value=13.0)
-        self.raw_val24 = DynamicRangeModule2(128, min_value=16.0, max_value=16.5)
 
     def forward(self, x):
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -256,23 +247,7 @@ class DynamicRangeModule(nn.Module):
         return range_value
 
 
-class DynamicRangeModule2(nn.Module):
-    def __init__(self, input_channels, min_value=0.1, max_value=10.0):
-        super().__init__()
-        self.min_value = min_value
-        self.max_value = max_value
-        self.range_net = nn.Sequential(
-            nn.Linear(input_channels, input_channels // 16),
-            nn.ReLU(),
-            nn.Linear(input_channels // 16, 1),
-            nn.Softplus()
-        )
 
-    def forward(self, x):
-        range_value = self.range_net(x)
-        range_value = range_value.mean()
-        range_value = self.max_value - (self.max_value - self.min_value) * torch.sigmoid(range_value)
-        return range_value
 
 
 if __name__ == '__main__':
